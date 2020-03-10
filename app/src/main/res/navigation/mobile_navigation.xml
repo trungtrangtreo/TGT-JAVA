@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@+id/nav_map">
+
+    <fragment
+            android:id="@+id/nav_about"
+            android:name="ca.thegreattrail.ui.about.AboutFragment"
+            android:label="@string/menu_about"
+            tools:layout="@layout/fragment_about">
+        <action
+                android:id="@+id/action_homeFragment_to_profileFragment"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_about_keen"
+            android:name="ca.thegreattrail.ui.aboutkeen.AboutKeenFragment"
+            android:label="@string/menu_about_keen"
+            tools:layout="@layout/fragment_about_keen"/>
+
+    <fragment
+            android:id="@+id/nav_donate"
+            android:name="ca.thegreattrail.ui.donate.DonateFragment"
+            android:label="@string/menu_donate"
+            tools:layout="@layout/fragment_donate"/>
+
+    <fragment
+            android:id="@+id/nav_feedback"
+            android:name="ca.thegreattrail.ui.feedback.FeedbackFragment"
+            android:label="@string/menu_feedback"
+            tools:layout="@layout/fragment_feedback"/>
+
+    <fragment
+            android:id="@+id/nav_offline_map"
+            android:name="ca.thegreattrail.ui.mapoffline.MapOfflineFragment"
+            android:label="@string/menu_offline_map"
+            tools:layout="@layout/fragment_map_offline"/>
+
+    <fragment
+            android:id="@+id/nav_faq"
+            android:name="ca.thegreattrail.ui.faq.FAQFragment"
+            android:label="@string/menu_faq"
+            tools:layout="@layout/fragment_faq"/>
+
+    <fragment
+            android:id="@+id/nav_setting"
+            android:name="ca.thegreattrail.ui.setting.SettingFragment"
+            android:label="@string/menu_setting"
+            tools:layout="@layout/fragment_setting"/>
+
+    <fragment
+            android:id="@+id/nav_exit"
+            android:name="ca.thegreattrail.ui.exit.ExitFragment"
+            android:label="@string/menu_exit"
+            tools:layout="@layout/fragment_exit"/>
+
+    <fragment
+            android:id="@+id/nav_map"
+            android:name="ca.thegreattrail.ui.map.MapFragment"
+            android:label="@string/title_map"
+            tools:layout="@layout/fragment_exit"/>
+
+    <fragment
+            android:id="@+id/nav_measure"
+            android:name="ca.thegreattrail.ui.measure.MeasureFragment"
+            android:label="@string/title_measure"
+            tools:layout="@layout/fragment_exit"/>
+
+    <fragment
+            android:id="@+id/nav_tracker"
+            android:name="ca.thegreattrail.ui.tracker.TrackerFragment"
+            android:label="@string/title_tracker"
+            tools:layout="@layout/fragment_exit"/>
+
+    <fragment
+            android:id="@+id/nav_archive"
+            android:name="ca.thegreattrail.ui.archive.ArchiveFragment"
+            android:label="@string/title_archive"
+            tools:layout="@layout/fragment_exit"/>
+</navigation>

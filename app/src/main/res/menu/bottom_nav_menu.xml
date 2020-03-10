@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/bg_map_selector"
+            android:title="@string/title_map"/>
+
+    <item
+            android:id="@+id/nav_measure"
+            android:icon="@drawable/bg_measure_selector"
+            android:title="@string/title_measure"/>
+
+    <item
+            android:id="@+id/nav_tracker"
+            android:icon="@drawable/bg_tracker_selector"
+            android:title="@string/title_tracker"/>
+
+    <item
+            android:id="@+id/nav_archive"
+            android:icon="@drawable/bg_archive_selector"
+            android:title="@string/title_archive"/>
+
+</menu>

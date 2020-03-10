@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tvName"
+        style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/gotham_medium"
+        android:paddingStart="@dimen/spacing_star_nav"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:text="111"
+        android:textColor="@color/gray_6"
+        android:textSize="@dimen/font_small" />
+

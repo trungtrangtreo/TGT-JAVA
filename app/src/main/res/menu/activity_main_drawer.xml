@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Each item id should be same as in the nav_graph fragment id-->
+
+    <item
+            android:id="@+id/nav_about"
+            android:title="@string/menu_about"/>
+
+    <item
+            android:id="@+id/nav_about_keen"
+            android:title="@string/menu_about_keen"/>
+
+    <item
+            android:id="@+id/nav_donate"
+            android:title="@string/menu_donate"/>
+
+    <item
+            android:id="@+id/nav_feedback"
+            android:title="@string/menu_feedback"/>
+
+    <item
+            android:id="@+id/nav_offline_map"
+            android:title="@string/menu_offline_map"/>
+
+    <item
+            android:id="@+id/nav_faq"
+            android:title="@string/menu_faq"/>
+
+    <item
+            android:id="@+id/nav_setting"
+            android:title="@string/menu_setting"/>
+
+    <item
+            android:id="@+id/nav_exit"
+            android:title="@string/menu_exit"/>
+
+</menu>

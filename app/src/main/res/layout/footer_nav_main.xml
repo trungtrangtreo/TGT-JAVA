@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tvVersionCode"
+        style="@style/TextStyleTitle"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:fontFamily="@font/gotham_medium"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_tiny"
+        android:paddingStart="@dimen/spacing_star_nav"
+        android:text="Version 2.0.1"
+        android:textColor="@color/gray_6"
+        android:textSize="@dimen/font_tiny">
+
+</TextView>

@@ -1,42 +1,40 @@
-    /*
- *  Copyright (C) 2017 MINDORKS NEXTGEN PRIVATE LIMITED
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      https://mindorks.com/license/apache-v2
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License
- */
 
 package ca.thegreattrail;
 
 import android.app.Activity;
 import android.app.Application;
+import androidx.multidex.MultiDexApplication;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import javax.inject.Inject;
 import ca.thegreattrail.utlis.AppLogger;
+import ca.thegreattrail.utlis.LruBitmapCache;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
-import javax.inject.Inject;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by amitshekhar on 07/07/17.
  */
 
-public class MvvmApp extends Application implements HasActivityInjector {
+public class MvvmApp extends MultiDexApplication implements HasActivityInjector {
 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
 
     @Inject
     CalligraphyConfig mCalligraphyConfig;
+
+    private Tracker mTracker;
+    private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
+
+    private static MvvmApp mInstance;
 
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {
@@ -59,6 +57,43 @@ public class MvvmApp extends Application implements HasActivityInjector {
             AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
         }
 
+        mInstance = this;
+
         CalligraphyConfig.initDefault(mCalligraphyConfig);
     }
+
+    public static synchronized MvvmApp getInstance() {
+        return mInstance;
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return mRequestQueue;
+    }
+
+    public ImageLoader getImageLoader() {
+        getRequestQueue();
+        if (mImageLoader == null) {
+            mImageLoader = new ImageLoader(this.mRequestQueue, new LruBitmapCache(getBaseContext()));
+        }
+        return this.mImageLoader;
+    }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
+    }
+
 }

@@ -21,6 +21,7 @@ public final class Constants {
     public static final int SMALLEST_DISPLACEMENT = 5; // 5m, It was 10
     // A fast frequency ceiling in milliseconds
     public static final long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
+    public static final int TIME_OUT = 10000;
 
 
     public static final int land = 0xFF38A800;       //  56-168-0

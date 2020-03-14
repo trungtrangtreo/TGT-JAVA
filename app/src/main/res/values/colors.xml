@@ -24,4 +24,6 @@
     <color name="gray_5">#121212</color>
     <color name="gray_6">#767676</color>
     <color name="blue_1">#355369</color>
+    <color name="blueGreen">#37647D</color>
+    <color name="textGrey">#65818181</color>
 </resources>

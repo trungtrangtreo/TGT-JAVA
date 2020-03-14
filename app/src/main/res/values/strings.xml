@@ -34,6 +34,7 @@
     <string name="title_tracker">Tracker</string>
     <string name="title_archive">Archive</string>
     <string name="title_search">Search</string>
+    <string name="title_directions_to_trail">Directions to the Trail</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -50,5 +51,20 @@
     <string name="menu_faq">FAQ</string>
     <string name="menu_setting">Settings</string>
     <string name="menu_exit">Exit</string>
+
+    <string name="label_upload_trail">Upload a photo of this Trail</string>
+    <string name="label_trail_type">Trail Type</string>
+    <string name="label_activities">Activities</string>
+    <string name="label_environment">Environment</string>
+    <string name="label_other_res">Other Resources</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_add_caption">Add a caption</string>
+    <string name="label_pick_image_intent_text">Choose an image</string>
+
+
+    <string name="alert_no_internet">No Internet connection</string>
+    <string name="alert_must_online_trail">You must be online to view trails</string>
+
+    <string name="button_share">Share</string>
 
 </resources>

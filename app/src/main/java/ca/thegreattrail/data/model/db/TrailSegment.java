@@ -453,7 +453,45 @@ public class TrailSegment {
         this.province = province;
     }
 
+    public String getDescription_fr() {
+        return description_fr;
+    }
 
+    public void setDescription_fr(String description_fr) {
+        this.description_fr = description_fr;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTrailType_fr() {
+        return trailType_fr;
+    }
+
+    public void setTrailType_fr(String trailType_fr) {
+        this.trailType_fr = trailType_fr;
+    }
+
+    public String getActivities_fr() {
+        return activities_fr;
+    }
+
+    public void setActivities_fr(String activities_fr) {
+        this.activities_fr = activities_fr;
+    }
+
+    public String getEnvironment_fr() {
+        return environment_fr;
+    }
+
+    public void setEnvironment_fr(String environment_fr) {
+        this.environment_fr = environment_fr;
+    }
 
     public void setStatusLength(String statusLength) {
         this.statusLength = statusLength;

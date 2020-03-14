@@ -1,5 +1,6 @@
 package ca.thegreattrail.ui.splash;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,17 +13,37 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
+import com.downloader.Progress;
 import com.google.android.gms.maps.model.LatLng;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.orhanobut.logger.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,14 +59,18 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import ca.thegreattrail.R;
 import ca.thegreattrail.data.local.db.ActivityDBHelperTrail;
 import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import ca.thegreattrail.data.model.db.TrailSegmentLightLight;
 import ca.thegreattrail.data.model.db.TrailWarning;
+import ca.thegreattrail.ui.howtouse.HowToUseActivity;
 import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.JsonParserExecutor;
@@ -53,28 +78,14 @@ import ca.thegreattrail.utlis.JsonParserExecutor;
 
 public class SplashScreenActivity extends Activity {
 
-    private String download_file_path = "https://api.tctrail.ca";
+    //  private String download_file_path ="https://api.tctrail.ca";
+    private String download_file_path = "https://firebasestorage.googleapis.com/v0/b/facedemo-2f20e.appspot.com/o/trailDb.sqlite?alt=media&token=b74f1951-83cc-4d44-ae21-1a0f1ab832eb";
     private boolean updateAvailable = false;
-    /**
-     * This value has been obtained by taking the average of all distances.
-     * averageDistance = (d1+d2....+dn) / n
-     * where
-     * - di : is the distance between a point and the point after it in the list of points
-     * constituting the segment.
-     * - n : is the number of of all distances across all segments
-     * <p>
-     * e.g
-     * we have only 2 segments each with 3 points (a point with represented by '0') as shown
-     * in figure :
-     * <p>
-     * 0--0----0
-     * 0-0---0
-     * <p>
-     * so averageDistance = (2 + 4 + 1 + 3) / 4
-     * <p>
-     */
+
+    private ProgressBar progressBar;
 
     private String workPath = "/data/data/ca.thegreattrail/databases/"; // "/storage/sdcard0/";  // "/data/data/ca.TransCanadaTrail.TheGreatTrail/databases/"; File file = new File(context.getFilesDir(), filename);
+    private String dbName = "trailDb.sqlite";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +97,14 @@ public class SplashScreenActivity extends Activity {
         if (!folder.exists()) {
             folder.mkdir();
         }
+        initPRDownLoader();
 
-        getTrailWarning();
-        checkDownloadAmenitiesDb();
-        checkDownloadTrailDb();
+        progressBar = findViewById(R.id.progressBar);
+
+//      getTrailWarning();
+//      checkDownloadAmenitiesDb();
+
+        checkPermissionReadWriteExternal();
 
 
 //        achievementsParserAsyncTask = new AchievementsParserAsyncTask(this, this);
@@ -395,76 +410,64 @@ public class SplashScreenActivity extends Activity {
                 e.printStackTrace();
             }
 
-            final DownloadTask downloadTask = new DownloadTask(SplashScreenActivity.this);
-            downloadTask.execute(download_file_path, "trailDb.sqlite", "resources.trailDb");
+//          final DownloadTask downloadTask = new DownloadTask(SplashScreenActivity.this);
+//          downloadTask.execute(download_file_path, "trailDb.sqlite", "resources.trailDb");
             // after we do calculation in  downloadTask
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
-            SharedPreferences.Editor editor = preferences.edit();
-            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-            String realToday = sdf.format(new Date());
-            editor.putString("today2", realToday);
-            editor.commit();
+            PRDownloader.download(download_file_path, workPath, dbName)
+                    .build()
+                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                        @Override
+                        public void onStartOrResume() {
+                            progressBar.setVisibility(View.VISIBLE);
+
+                        }
+                    })
+                    .setOnPauseListener(new OnPauseListener() {
+                        @Override
+                        public void onPause() {
+
+                        }
+                    })
+                    .setOnCancelListener(new OnCancelListener() {
+                        @Override
+                        public void onCancel() {
+
+                        }
+                    })
+                    .setOnProgressListener(new OnProgressListener() {
+                        @Override
+                        public void onProgress(Progress progress) {
+
+                        }
+                    })
+                    .start(new OnDownloadListener() {
+                        @Override
+                        public void onDownloadComplete() {
+                            progressBar.setVisibility(View.GONE);
+                            final DoCalculations doCalculations = new DoCalculations(SplashScreenActivity.this);
+                            doCalculations.execute();
+                        }
+
+                        @Override
+                        public void onError(Error error) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(SplashScreenActivity.this, error.getServerErrorMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
         } else {
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
-            SharedPreferences.Editor editor = preferences.edit();
-
-            boolean update = false;
-            if (preferences.contains("today2")) {
-
-                String storedToday = preferences.getString("today2", "");
-                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-                String realToday = sdf.format(new Date());
-
-                if (!realToday.equals(storedToday)) {
-                    update = true;
-                }
-                editor.putString("today2", realToday);
-                editor.commit();
-            } else {
-                editor.putString("today2", "");
-                editor.commit();
-            }
-
-
-            if (isNetworkAvailable() && update) {
-
-                final String trailDbChecksumLocal = mycheck(workPath + "trailDb.sqlite");
-                fileChecksumServer("trailDb.sqlite", "resources.trailDb", trailDbChecksumLocal, new VolleyCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        JSONObject jsonResponse;
-                        try {
-                            jsonResponse = new JSONObject(result);
-                            String status = jsonResponse.getString("status");
-                            String trailDbChecksumServer = jsonResponse.getString("checksum");
-
-
-                            if (!trailDbChecksumServer.equals(trailDbChecksumLocal)) {
-
-                                // execute this when the downloader must be fired
-                                final DownloadTask downloadTask = new DownloadTask(SplashScreenActivity.this);
-                                downloadTask.execute(download_file_path, "trailDb.sqlite", "resources.trailDb");
-
-                                // after we do calculation in  downloadTask
-                            } else {
-                                final DoCalculations doCalculations = new DoCalculations(SplashScreenActivity.this);
-                                doCalculations.execute();
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            } else {
-                final DoCalculations doCalculations = new DoCalculations(SplashScreenActivity.this);
-                doCalculations.execute();
-            }
+            DoCalculations doCalculations = new DoCalculations(SplashScreenActivity.this);
+            doCalculations.execute();
         }
+    }
+
+    private void initPRDownLoader() {
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                .setReadTimeout(Constants.TIME_OUT)
+                .setConnectTimeout(Constants.TIME_OUT)
+                .build();
+        PRDownloader.initialize(getApplicationContext(), config);
     }
 
     private void retrieveTrailFromDB() {
@@ -830,16 +833,15 @@ public class SplashScreenActivity extends Activity {
         @Override
         protected String doInBackground(String... param) {
             retrieveTrailFromDB();
-//           mergeTrailSegments();
+            mergeTrailSegments();
 
-            Log.e("trung test 1", MainActivity.listPoints.size()+"");
-            Log.e("trung test 2", MainActivity.listSegments.size()+"");
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
             // take CPU lock to prevent CPU from going off if the user
             // presses the power button during download
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -861,11 +863,39 @@ public class SplashScreenActivity extends Activity {
             mWakeLock.release();
             // mProgressDialog.dismiss();
 
-            Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+            Intent i = new Intent(SplashScreenActivity.this, HowToUseActivity.class);
             startActivity(i);
             // close this activity
             finish();
         }
-
     }
+
+    private void checkPermissionReadWriteExternal(){
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            checkDownloadTrailDb();
+                        }
+
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // permission is denied permenantly, navigate user to app settings
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
 }

@@ -39,6 +39,7 @@ public final class Constants {
     public static final String API_KEY_FLICKR = "51181cfd2b7ef8ce5b2111fb971b3ec9";
     public static final String SECRET_FLICKR = "e855b9b8a807aa66";
     public static final String AUTH_TOKEN_FLICKR = "72157670878062012-37eca4a58c95f370";
+    public static final String API_KEY_SEARCH = "AIzaSyDmUchHRXUJdnzGOE0vLD1txL7fvE3FeO8";
     public static final String NSID ="97852224@N00";
     public static final String UPLOAD_ALBUM_ID =  "72157671608185416" ;
     public static final String URL_SEARCH_FLIKR  = "https://api.flickr.com/services/rest/?&method=flickr.photos.search&format=json&nojsoncallback=1&user_id="+NSID+"&api_key="+API_KEY_FLICKR+"&tags=";

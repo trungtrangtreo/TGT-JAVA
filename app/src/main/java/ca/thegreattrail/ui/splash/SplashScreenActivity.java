@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,11 +38,9 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.orhanobut.logger.Logger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,9 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import ca.thegreattrail.R;
 import ca.thegreattrail.data.local.db.ActivityDBHelperTrail;
 import ca.thegreattrail.data.model.db.TrailSegmentLight;
@@ -74,7 +69,6 @@ import ca.thegreattrail.ui.howtouse.HowToUseActivity;
 import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.JsonParserExecutor;
-
 
 public class SplashScreenActivity extends Activity {
 
@@ -142,10 +136,8 @@ public class SplashScreenActivity extends Activity {
             urlTrailWarning = urlTrailWarning.replace("Message", messageKey);
         }
 
-
         RequestQueue queue = Volley.newRequestQueue(this);  // this = context
         // final String checksum="";
-
 
         final String finalMessageKey = messageKey;
         final String finalLocationKey = locationKey;
@@ -202,15 +194,12 @@ public class SplashScreenActivity extends Activity {
 
         };
         queue.add(postRequest);
-
     }
-
 
     private boolean checkUpdate() {
 
         String url = download_file_path;
         RequestQueue queue = Volley.newRequestQueue(this);  // this = context
-
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -252,8 +241,6 @@ public class SplashScreenActivity extends Activity {
         };
         queue.add(postRequest);
         return updateAvailable;
-
-
     }
 
     public interface VolleyCallback {
@@ -264,7 +251,7 @@ public class SplashScreenActivity extends Activity {
 
     private void fileChecksumServer(final String file, final String resource, final String localChecksum, final VolleyCallback callback) {
 
-// si le fichier n existe pas ne pas  continuer
+        // si le fichier n existe pas ne pas  continuer
         String url = download_file_path;
         RequestQueue queue = Volley.newRequestQueue(this);  // this = context
         // final String checksum="";
@@ -331,7 +318,6 @@ public class SplashScreenActivity extends Activity {
 
             final DownloadTask downloadTask = new DownloadTask(SplashScreenActivity.this);
             downloadTask.execute(download_file_path, "amenitiesDb.sqlite", "resources.amenitiesDb");
-
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
             SharedPreferences.Editor editor = preferences.edit();
             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");

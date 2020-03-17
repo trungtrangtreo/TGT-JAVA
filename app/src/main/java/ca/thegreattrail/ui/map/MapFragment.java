@@ -69,7 +69,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     private final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DASH);
 
     protected int unSelectedPolylineWidth = 5;
-    protected int selectedPolylineWidth = 5;
+    protected int selectedPolylineWidth = 15;
     public int selectedSegmentId = 0;
     public int lastSelectedSegmentId = 0;
     public int lastObjectIdMeasureTool = 0;
@@ -391,15 +391,20 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
 
     private void pushMapFragmentToStack() {
         String segmentTag = "MapFragment";
-//        MapFragment mapFragment = ((MainActivity) getActivity()).getMapFragment();
-//
-//        if (mapFragment == null)
-//            return;
-//
-//        mapfragStack.put(segmentTag, mapFragment);
-//        mapFragmentragTagStack.push(segmentTag);
+        MapFragment mapFragment = (MapFragment) MainActivity.fragment;
+
+        if (mapFragment == null)
+            return;
+
+        mapfragStack.put(segmentTag, mapFragment);
+        mapfragTagStack.push(segmentTag);
 
     }
+
+    public int getSelectedSegmentId() {
+        return selectedSegmentId;
+    }
+
 
     public void replaceFragment(int resourceID, Fragment rFragment) {
         if (rFragment != null) {
@@ -407,6 +412,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
             FragmentTransaction mFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             mFragmentTransaction
                     .replace(resourceID, rFragment)
+                    .addToBackStack(null)
                     .commit();
         }
 

@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
 
     private AppBarConfiguration appBarConfiguration;
 
+    public static Fragment fragment = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                Fragment fragment = null;
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
                 String tag = "";
                 switch (menuItem.getItemId()) {

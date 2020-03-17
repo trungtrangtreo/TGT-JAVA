@@ -34,11 +34,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -48,9 +50,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -255,8 +259,8 @@ public class SegmentDetailsFragment extends BaseFragment {
                 }
 
                 pushSegmentDetailFragment();
-//              DirectionTrailFragment directionTrailFragment = DirectionTrailFragment.newInstance(trailId);
-//              replaceFragment(directionTrailFragment);
+                DirectionTrailFragment directionTrailFragment = DirectionTrailFragment.newInstance(trailId);
+                replaceFragment(directionTrailFragment);
             }
         });
 

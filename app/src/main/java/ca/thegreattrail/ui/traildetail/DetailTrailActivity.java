@@ -1,7 +1,6 @@
 package ca.thegreattrail.ui.traildetail;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -29,13 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -44,18 +41,15 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.Tracker;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Stack;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.thegreattrail.MvvmApp;
@@ -63,7 +57,6 @@ import ca.thegreattrail.R;
 import ca.thegreattrail.data.local.db.ActivityDBHelperTrail;
 import ca.thegreattrail.data.model.db.TrailSegment;
 import ca.thegreattrail.ui.base.BaseActivity;
-import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.ui.map.MapFragment;
 import ca.thegreattrail.ui.traildetail.fullimage.FullImageActivity;
 import ca.thegreattrail.utlis.Constants;

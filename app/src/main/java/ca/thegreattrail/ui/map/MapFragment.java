@@ -2,6 +2,8 @@ package ca.thegreattrail.ui.map;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -34,16 +37,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 
-import butterknife.BindView;
 import ca.thegreattrail.R;
 import ca.thegreattrail.data.local.db.ActivityDBHelperTrail;
 import ca.thegreattrail.data.model.db.TrailSegment;
 import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import ca.thegreattrail.ui.base.BaseFragment;
 import ca.thegreattrail.ui.main.MainActivity;
-import ca.thegreattrail.ui.traildetail.SegmentDetailsFragment;
+import ca.thegreattrail.ui.traildetail.DetailTrailActivity;
 import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.TrailUtility;
 
@@ -61,6 +64,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     private int PATTERN_GAP_LENGTH_PX = 20;
     private int TRAIL_LOW_RESOLUTION_DROPPED_POINTS_COUNT = 50;
     public static final int TRAIL_HIGH_RESOLUTION_MINIMUM_ZOOM_LEVEL = 10;
+    private String TAG = MapFragment.class.getSimpleName();
 
     private IncreaseTrailResolutionTask increaseTrailResolutionTask;
 
@@ -71,8 +75,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     protected int unSelectedPolylineWidth = 5;
     protected int selectedPolylineWidth = 15;
     public int selectedSegmentId = 0;
-    public int lastSelectedSegmentId = 0;
-    public int lastObjectIdMeasureTool = 0;
+    private int lastSelectedSegmentId = 0;
+    private int lastObjectIdMeasureTool = 0;
 
     private TrailSegment selectedTrail;
 
@@ -85,6 +89,10 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     private RelativeLayout rlBottom;
 
     private FrameLayout searchLayout;
+
+    public static final String TRAIL_ID = "trailId";
+    public static final String TRAIL_NAME = "trail_name";
+    public static final String OBJECT_ID = "object_id";
 
     @Override
     public int getLayoutId() {
@@ -120,6 +128,20 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
 
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            Objects.requireNonNull(getContext()), R.raw.style_json));
+
+            if (!success) {
+                Logger.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Logger.e(TAG, "Can't find style. Error: ", e);
+        }
 
         if (MainActivity.listSegments == null) {
             googleMap.setOnCameraIdleListener(null);
@@ -351,10 +373,10 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rlBottom:
+        if (v.getId() == R.id.rlBottom) {
+            if (selectedTrail != null) {
                 getDetailTrail();
-                break;
+            }
         }
     }
 
@@ -373,20 +395,26 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
                     .show();
             return;
         }
-        pushMapFragmentToStack();
+//        pushMapFragmentToStack();
 
-        SegmentDetailsFragment segmentDetailsFragment = new SegmentDetailsFragment();
-        segmentDetailsFragment.setObjectId(lastSelectedSegmentId);
-        Bundle args = new Bundle();
-        args.putString("trailId", selectedTrail.getTrailId());
-        args.putString("trail_name", selectedTrail.getTrailName());
-        segmentDetailsFragment.setArguments(args);
-
-        replaceFragment(R.id.searchLayout, segmentDetailsFragment);
+//        SegmentDetailsFragment segmentDetailsFragment = new SegmentDetailsFragment();
+//        segmentDetailsFragment.setObjectId(lastSelectedSegmentId);
+//        Bundle args = new Bundle();
+//        args.putString("trailId", selectedTrail.getTrailId());
+//        args.putString("trail_name", selectedTrail.getTrailName());
+//        segmentDetailsFragment.setArguments(args);
+//
+//        replaceFragment(R.id.searchLayout, segmentDetailsFragment);
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+
+        Intent intent = new Intent(getContext(), DetailTrailActivity.class);
+        intent.putExtra(TRAIL_ID, selectedTrail.getTrailId());
+        intent.putExtra(TRAIL_NAME, selectedTrail.getTrailName());
+        intent.putExtra(OBJECT_ID, lastSelectedSegmentId);
+        startActivity(intent);
     }
 
     private void pushMapFragmentToStack() {
@@ -409,7 +437,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     public void replaceFragment(int resourceID, Fragment rFragment) {
         if (rFragment != null) {
             searchLayout.setVisibility(View.VISIBLE);
-            FragmentTransaction mFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction mFragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
             mFragmentTransaction
                     .replace(resourceID, rFragment)
                     .addToBackStack(null)

@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         bottomNavigationView.setItemIconTintList(null);
 
+        itemNavigationClick();
     }
 
     private void itemNavigationClick() {
@@ -111,10 +112,9 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
                         if (!(currentFragment instanceof MapFragment)) {
                             fragment = new MapFragment();
                         }
-
                         tag = MapFragment.class.getSimpleName();
-
                         break;
+
                     case R.id.nav_measure:
                         if (!(currentFragment instanceof MeasureFragment)) {
                             fragment = new MeasureFragment();
@@ -127,18 +127,19 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
                             fragment = new TrackerFragment();
                         }
                         tag = TrackerFragment.class.getSimpleName();
+                        break;
 
                     case R.id.nav_archive:
-                        if (currentFragment instanceof ArchiveFragment) {
+                        if (!(currentFragment instanceof ArchiveFragment)) {
                             fragment = new ArchiveFragment();
                         }
                         tag = ArchiveFragment.class.getSimpleName();
+                        break;
                 }
 
                 if (fragment != null) {
                     replaceFragmentInActivity(fragment, R.id.main_nav_host);
                 }
-
 
                 return true;
             }
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -160,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
     }
 
     private void replaceFragmentInActivity(Fragment fragment, int container) {
-        getSupportFragmentManager().beginTransaction().replace(container, fragment, fragment.getClass().getSimpleName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(container, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     private ArrayList<String> initArray() {

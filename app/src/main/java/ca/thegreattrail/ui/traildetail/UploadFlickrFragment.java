@@ -47,14 +47,11 @@ import ca.thegreattrail.utlis.VolleySingleton;
 
 public class UploadFlickrFragment extends BaseFragment {
 
-
     public static UploadFlickrFragment instance = null;
      private TextView shareTxt ;
     private ImageView shareImg;
     public Bitmap photo;
     public String trailId = "";
-    MainActivity activity;
-
 
     public static UploadFlickrFragment getInstance() {
 
@@ -82,11 +79,6 @@ public class UploadFlickrFragment extends BaseFragment {
         return 0;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity=(MainActivity)context;
-    }
 
     /* @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +117,7 @@ public class UploadFlickrFragment extends BaseFragment {
                 photoId = uploadFileToFlickr(shareTxt.getText().toString().trim(), trailId);
 
 
-                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getBaseActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(
                         shareTxt.getWindowToken(), 0);
 
@@ -274,7 +266,7 @@ public class UploadFlickrFragment extends BaseFragment {
                         error.printStackTrace();
                         displayDialog("Error","The photo is not uploaded ");
                         //exitThisfragment();
-                        activity.onBackPressed();
+                        getBaseActivity().onBackPressed();
                         progressDialog.dismiss();
                     }
                 }
@@ -526,7 +518,7 @@ public class UploadFlickrFragment extends BaseFragment {
                 else{
                     displayDialog("Fail To Upload","Fail to upload the photo, Try in a while");
                     //exitThisfragment();
-                    activity.onBackPressed();
+                    getBaseActivity().onBackPressed();
                 }
 
 

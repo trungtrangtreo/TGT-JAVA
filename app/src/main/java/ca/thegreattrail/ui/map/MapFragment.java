@@ -167,8 +167,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
                 drawTrailSegment(segment);
             }
         }
-        Logger.e("listSegments" + MainActivity.listSegments.size());
-        Logger.e("listPoints= " + MainActivity.listPoints.size());
+//        Logger.e("listSegments" + MainActivity.listSegments.size());
+//        Logger.e("listPoints= " + MainActivity.listPoints.size());
     }
 
     private void drawTrailSegment(TrailSegmentLight segment) {

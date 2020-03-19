@@ -44,6 +44,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import ca.thegreattrail.R;
@@ -63,7 +64,6 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
     private static final String ARGUMENT_TRAIL_ID = "ARGUMENT_TRAIL_ID";
 
-    MainActivity activity;
     String LANGUAGE_ENGLISH = "en";
     String LANGUAGE_FRENCH = "fr";
     String TRANSPORT_DRIVING = "driving";
@@ -90,7 +90,6 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (MainActivity) context;
     }
 
     @Override
@@ -106,9 +105,9 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
         View footerView = inflater.inflate(R.layout.direction_footer, null, false);
 
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        activity.getSupportActionBar().setTitle(Html.fromHtml("<small>Directions to the Trail</small>"));
+//        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        activity.getSupportActionBar().setTitle(Html.fromHtml("<small>Directions to the Trail</small>"));
 
         mMapView = (MapView) view.findViewById(R.id.mapview);
         mMapView.onCreate(savedInstanceState);
@@ -119,7 +118,7 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
         trailId = getArguments().getString(ARGUMENT_TRAIL_ID);
         if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(activity)
+            mGoogleApiClient = new GoogleApiClient.Builder(Objects.requireNonNull(getContext()))
                     .addConnectionCallbacks(this)
                     .addApi(LocationServices.API)
                     .build();
@@ -313,7 +312,7 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
     private void retrieveRoute() {
         try {
-            AmenityDBHelperTrail db = new AmenityDBHelperTrail(activity);
+            AmenityDBHelperTrail db = new AmenityDBHelperTrail(getContext());
             AmenitySegment nearestAmenity = db.getNearestRestAmenity(trailId, myLocation);
 
             if (nearestAmenity != null) {
@@ -324,7 +323,7 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
                 Log.d("nearestAmenity", "" + nearestAmenity.getName_amenity());
             } else {
-                Toast.makeText(activity, "Unable to get directions to this trail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Unable to get directions to this trail", Toast.LENGTH_SHORT).show();
 //              activity.onBackPressed();
             }
 
@@ -363,7 +362,7 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -476,7 +475,7 @@ public class DirectionTrailFragment extends BaseTrailDrawingFragment implements 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(activity);
+            pDialog = new ProgressDialog(getContext());
             pDialog.setMessage("Loading...");
             pDialog.show();
         }

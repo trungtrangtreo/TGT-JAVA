@@ -28,11 +28,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,15 +43,18 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.Tracker;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Stack;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.thegreattrail.MvvmApp;
@@ -140,6 +145,8 @@ public class DetailTrailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        images.clear();
+        imageGallery.removeAllViews();
         loadDetailTrail();
     }
 
@@ -159,11 +166,11 @@ public class DetailTrailActivity extends BaseActivity {
                 int num = x / (dpToPx(150) + 30);
                 Log.i(TAG, " Le click  num = " + num);
 
-                if (num < images.size()) {
-                    Intent myIntent = new Intent(DetailTrailActivity.this, FullImageActivity.class);
-                    myIntent.putExtra("num", num);
-                    startActivity(myIntent);
-                }
+//                if (num < images.size()) {
+//                    Intent myIntent = new Intent(DetailTrailActivity.this, FullImageActivity.class);
+//                    myIntent.putExtra("num", num);
+//                    startActivity(myIntent);
+//                }
             }
         });
 

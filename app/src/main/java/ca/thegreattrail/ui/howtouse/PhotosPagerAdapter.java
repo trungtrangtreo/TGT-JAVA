@@ -1,6 +1,7 @@
 package ca.thegreattrail.ui.howtouse;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,17 +12,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import ca.thegreattrail.R;
 import ca.thegreattrail.data.model.other.Tutorial;
 import ca.thegreattrail.ui.main.MainActivity;
@@ -47,6 +53,11 @@ public class PhotosPagerAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        ((ViewPager) container).removeView((View) object);
     }
 
     @NonNull
@@ -94,6 +105,7 @@ public class PhotosPagerAdapter extends PagerAdapter {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         context.startActivity(new Intent(context, MainActivity.class));
+                        ((HowToUseActivity)context).finish();
                     }
 
                     @Override

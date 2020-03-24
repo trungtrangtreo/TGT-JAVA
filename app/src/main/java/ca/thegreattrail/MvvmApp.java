@@ -3,6 +3,8 @@ package ca.thegreattrail;
 
 import android.app.Activity;
 import android.app.Application;
+
+import androidx.multidex.BuildConfig;
 import androidx.multidex.MultiDexApplication;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;

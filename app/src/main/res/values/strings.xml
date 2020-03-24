@@ -60,11 +60,29 @@
     <string name="label_photo">Photo</string>
     <string name="label_add_caption">Add a caption</string>
     <string name="label_pick_image_intent_text">Choose an image</string>
-
+    <string name="label_distance"> DISTANCE </string>
+    <string name="label_elevation"> ELEVATION </string>
+    <string name="label_measureMessage">Tap to drop a pin on the trail.</string>
+    <string name="label_measureMessage2">Drop another pin on the Trail to measure distance</string>
+    <string name="label_drop_pin_note">Tap on the trail precisely or zoom in</string>
+    <string name="label_more">MORE </string>
+    <string name="label_google_place">Google Place</string>
+    <string name="label_google_place_service">Google Place Services</string>
+    <string name="label_trail_services">Trail Services</string>
+    <string name="label_recent_search">Recent Searches</string>
+    <string name="label_trails">Trails</string>
 
     <string name="alert_no_internet">No Internet connection</string>
     <string name="alert_must_online_trail">You must be online to view trails</string>
+    <string name="alert_clear_measurement_title">Clear Measurement</string>
+    <string name="alert_clear_measurement_message">Are you sure you want clear this measurement?</string>
 
     <string name="button_share">Share</string>
+
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="pause"> Pause </string>
+    <string name="save"> Save </string>
+    <string name="delete"> Delete </string>
 
 </resources>

@@ -28,6 +28,7 @@ import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import ca.thegreattrail.data.model.db.TrailSegmentLightLight;
 import ca.thegreattrail.data.model.db.TrailWarning;
 import ca.thegreattrail.ui.archive.ArchiveFragment;
+import ca.thegreattrail.ui.base.BaseTrailDrawingFragment;
 import ca.thegreattrail.ui.map.MapFragment;
 import ca.thegreattrail.ui.measure.MeasureFragment;
 import ca.thegreattrail.ui.tracker.TrackerFragment;

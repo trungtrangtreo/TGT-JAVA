@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="trailServiceArray">
+        <item>Access Point</item>
+        <item>Parking</item>
+        <item>Rest Areas</item>
+    </array>
+    <array name="googlePlacesServiceArray">
+        <item>Restaurant</item>
+        <item>Campground</item>
+        <item>Café</item>
+        <item>ATM</item>
+        <item>Lodging</item>
+        <item>Bakery</item>
+        <item>Bicycle Store</item>
+        <item>Convenience Store</item>
+        <item>Hardware Store</item>
+        <item>Hospital</item>
+        <item>Museum</item>
+        <item>Park</item>
+        <item>Pharmacy</item>
+    </array>
+
+<!--    <array name="achievement_icons">-->
+<!--        <item>@drawable/downloadtheapp_option2_copy_inactive</item>-->
+<!--        <item>@drawable/findthegreattrail_option1_copy_inactive</item>-->
+<!--        <item>@drawable/connectioneventbadge_copy_inactive</item>-->
+<!--        <item>@drawable/visitthetrailinanotherprovince_option1_copy_inactive</item>-->
+<!--        <item>@drawable/visitthetrail2xinaweek_option1_copy_inactive</item>-->
+<!--        <item>@drawable/timebadges_option2_copy_inactive</item>-->
+<!--        <item>@drawable/track10km_option1_copy_inactive</item>-->
+<!--        <item>@drawable/track50km_option2_copy_inactive</item>-->
+<!--        <item>@drawable/changeinelevation_option1_copy_inactive</item>-->
+<!--    </array>-->
+
+</resources>

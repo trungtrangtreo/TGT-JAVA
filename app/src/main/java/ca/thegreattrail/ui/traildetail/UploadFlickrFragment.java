@@ -16,6 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
@@ -36,6 +39,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import ca.thegreattrail.R;
 import ca.thegreattrail.ui.base.BaseFragment;
@@ -45,7 +49,7 @@ import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.VolleyMultipartRequest;
 import ca.thegreattrail.utlis.VolleySingleton;
 
-public class UploadFlickrFragment extends BaseFragment {
+public class UploadFlickrFragment extends Fragment {
 
     public static UploadFlickrFragment instance = null;
      private TextView shareTxt ;
@@ -73,12 +77,6 @@ public class UploadFlickrFragment extends BaseFragment {
     public UploadFlickrFragment() {
         // Required empty public constructor
     }
-
-    @Override
-    public int getLayoutId() {
-        return 0;
-    }
-
 
     /* @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +115,7 @@ public class UploadFlickrFragment extends BaseFragment {
                 photoId = uploadFileToFlickr(shareTxt.getText().toString().trim(), trailId);
 
 
-                InputMethodManager imm = (InputMethodManager) getBaseActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(
                         shareTxt.getWindowToken(), 0);
 
@@ -266,7 +264,7 @@ public class UploadFlickrFragment extends BaseFragment {
                         error.printStackTrace();
                         displayDialog("Error","The photo is not uploaded ");
                         //exitThisfragment();
-                        getBaseActivity().onBackPressed();
+                        Objects.requireNonNull(getActivity()).onBackPressed();
                         progressDialog.dismiss();
                     }
                 }
@@ -518,7 +516,7 @@ public class UploadFlickrFragment extends BaseFragment {
                 else{
                     displayDialog("Fail To Upload","Fail to upload the photo, Try in a while");
                     //exitThisfragment();
-                    getBaseActivity().onBackPressed();
+                    getActivity().onBackPressed();
                 }
 
 

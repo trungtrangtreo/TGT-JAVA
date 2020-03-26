@@ -1,25 +1,14 @@
 package ca.thegreattrail.ui.measure;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
-
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.ChartTouchListener;
@@ -30,13 +19,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-
 import butterknife.ButterKnife;
 import ca.thegreattrail.R;
-import ca.thegreattrail.ui.base.BaseTrailDrawingFragment;
 import ca.thegreattrail.ui.base.HomeTabMapFragment;
-import ca.thegreattrail.ui.main.MainActivity;
 
 public class MeasureFragment extends HomeTabMapFragment implements OnChartGestureListener, OnChartValueSelectedListener {
 
@@ -86,7 +71,7 @@ public class MeasureFragment extends HomeTabMapFragment implements OnChartGestur
     }
 
     private void setUiValues(Bundle savedInstanceState, View view) {
-        mMapView = (MapView) view.findViewById(R.id.mapview1);
+        mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 //        dropAnotherPinTv.setVisibility(View.GONE);
 
@@ -176,72 +161,83 @@ public class MeasureFragment extends HomeTabMapFragment implements OnChartGestur
     @Override
     protected void initializeMap(GoogleMap googleMap) {
         myMap = googleMap;
-        myMap.getUiSettings().setRotateGesturesEnabled(false);
+//        myMap.getUiSettings().setRotateGesturesEnabled(false);
 
-        myMap.getUiSettings().setMapToolbarEnabled(false);
-        if (MainActivity.listSegments == null) {
-            myMap.setOnCameraIdleListener(null);
-        } else {
+//        myMap.getUiSettings().setMapToolbarEnabled(false);
+//        if (MainActivity.listSegments == null) {
+//            myMap.setOnCameraIdleListener(null);
+//        } else {
 //            myMap.setOnCameraIdleListener(getCameraChangeListener3());
-        }
-//        myMap.setOnMapClickListener(onMapClick());
+//        }
+//      myMap.setOnMapClickListener(onMapClick());
 
         // Set OnMapLoadedCallback Listener.
-        myMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+//        myMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+//
+//            @Override
+//            public void onMapLoaded() {
+//
+////                askPermissionsAndShowMyLocation();
+//
+//            }
+//        });
+//        myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//        myMap.getUiSettings().setZoomControlsEnabled(false);
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
+//        }
+//        myMap.setMyLocationEnabled(true);
+//        myMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            @Override
-            public void onMapLoaded() {
+//        myMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+//
+//            @Override
+//            public View getInfoWindow(Marker arg0) {
+//                return null;
+//            }
+//
+//            @Override
+//            public View getInfoContents(Marker marker) {
+//
+//                Context context = getActivity(); //or getActivity(), YourActivity.this, etc.
+//
+//                LinearLayout info = new LinearLayout(context);
+//                info.setOrientation(LinearLayout.VERTICAL);
+//
+//
+//                TextView title = new TextView(context);
+//                title.setTextColor(Color.BLACK);
+//                title.setGravity(Gravity.CENTER);
+//                title.setTypeface(null, Typeface.BOLD);
+//                title.setText(marker.getTitle());
+//
+//                TextView snippet = new TextView(context);
+//                snippet.setTextColor(Color.GRAY);
+//                snippet.setText(marker.getSnippet());
+//
+//                info.addView(title);
+//                info.addView(snippet);
+//
+//                return info;
+//            }
+//        });
 
-//                askPermissionsAndShowMyLocation();
-
-            }
-        });
-        myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        myMap.getUiSettings().setZoomControlsEnabled(false);
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
-        myMap.setMyLocationEnabled(true);
-        myMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        myMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-
-                Context context = getActivity(); //or getActivity(), YourActivity.this, etc.
-
-                LinearLayout info = new LinearLayout(context);
-                info.setOrientation(LinearLayout.VERTICAL);
-
-
-                TextView title = new TextView(context);
-                title.setTextColor(Color.BLACK);
-                title.setGravity(Gravity.CENTER);
-                title.setTypeface(null, Typeface.BOLD);
-                title.setText(marker.getTitle());
-
-                TextView snippet = new TextView(context);
-                snippet.setTextColor(Color.GRAY);
-                snippet.setText(marker.getSnippet());
-
-                info.addView(title);
-                info.addView(snippet);
-
-                return info;
-            }
-        });
-
-        myMap.setMyLocationEnabled(true);
+//        myMap.setMyLocationEnabled(true);
     }
 
+    public GoogleMap.OnCameraIdleListener getCameraChangeListener3() {
+        return new GoogleMap.OnCameraIdleListener() {
+
+            @Override
+            public void onCameraIdle() {
+                MeasureFragment.super.onCameraIdle();
+                center = myMap.getCameraPosition().target;
+                zoom = myMap.getCameraPosition().zoom;
+            }
+        };
+    }
 
     /*Chart SDK*/
     @Override

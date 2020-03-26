@@ -1,10 +1,9 @@
 package ca.thegreattrail.ui.base;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-
 import androidx.annotation.CallSuper;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -21,7 +20,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,11 +30,6 @@ import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.TrailUtility;
-
-
-/**
- * Created by Islam Salah on 8/13/17.
- */
 
 public abstract class BaseTrailDrawingFragment extends Fragment {
 
@@ -252,6 +245,7 @@ public abstract class BaseTrailDrawingFragment extends Fragment {
         return TrailUtility.nearbySegments(center);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class IncreaseTrailResolutionTask extends AsyncTask<Void, Void, List<Polyline>> {
 
         private LatLngBounds bounds;

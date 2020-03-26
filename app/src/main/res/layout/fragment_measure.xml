@@ -24,10 +24,10 @@
                 android:id="@+id/location_toggle_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom|right"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 app:backgroundTint="#FFFFFFFF"
@@ -35,7 +35,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/mapview1"
+                android:id="@+id/mapView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

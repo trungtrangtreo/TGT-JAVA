@@ -1,17 +1,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
-
 
         <!-- Layout 1-->
         <RelativeLayout
@@ -30,6 +28,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
+                android:visibility="gone"
                 app:backgroundTint="#FFFFFFFF"
                 app:srcCompat="@drawable/ic_my_loc"
                 tools:ignore="VectorDrawableCompat" />
@@ -37,7 +36,7 @@
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -53,8 +52,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:layout_weight="0.50"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <ImageView
@@ -71,11 +70,11 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="0dp"
                     android:layout_weight="0.60"
+                    android:background="@color/white"
                     android:gravity="center"
                     android:text="0 km"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:background="@color/white"
                     android:textSize="22dp" />
 
                 <TextView
@@ -85,11 +84,11 @@
                     android:layout_marginTop="-7dp"
                     android:layout_marginBottom="-7dp"
                     android:layout_weight="0.40"
+                    android:background="@color/white"
                     android:gravity="center"
                     android:text="@string/label_distance"
                     android:textAlignment="center"
                     android:textColor="@color/textGrey"
-                    android:background="@color/white"
                     android:textSize="11dp" />
 
             </LinearLayout>
@@ -106,8 +105,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:layout_weight="0.50"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <ImageView
@@ -115,8 +114,8 @@
                     android:layout_width="20dp"
                     android:layout_height="25dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp" />
 
                 <TextView
                     android:id="@+id/txtElevationMeasure"
@@ -125,11 +124,11 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="0dp"
                     android:layout_weight="0.60"
+                    android:background="@color/white"
                     android:gravity="center"
                     android:text="0 m"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:background="@color/white"
                     android:textSize="22dp" />
 
                 <TextView
@@ -139,11 +138,11 @@
                     android:layout_marginTop="-7dp"
                     android:layout_marginBottom="-7dp"
                     android:layout_weight="0.40"
+                    android:background="@color/white"
                     android:gravity="center"
                     android:text="@string/label_elevation"
                     android:textAlignment="center"
                     android:textColor="@color/textGrey"
-                    android:background="@color/white"
                     android:textSize="11dp" />
 
             </LinearLayout>
@@ -171,7 +170,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/label_measureMessage"
                 android:textColor="@color/black"
-                android:textSize="@dimen/fragment_text_size"/>
+                android:textSize="@dimen/fragment_text_size" />
 
             <TextView
                 android:id="@+id/drop_another_pin_tv"
@@ -182,7 +181,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/label_measureMessage2"
                 android:textColor="@color/black"
-                android:textSize="@dimen/fragment_text_size"/>
+                android:textSize="@dimen/fragment_text_size" />
 
         </FrameLayout>
 

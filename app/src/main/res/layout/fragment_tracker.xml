@@ -1,23 +1,222 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray">
+        android:orientation="vertical">
 
-    <TextView
-            android:id="@+id/text_notifications"
+        <RelativeLayout
+            android:id="@+id/activityTrackerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Tracker"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                map:cameraTargetLat="56.1304"
+                map:cameraTargetLng="-106.3468" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray2"
+            android:orientation="vertical">
+
+            <!-- Layout 4  Buttons-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="15dp"
+                android:layout_weight="0.50"
+                android:background="@color/gray2">
+
+                <Button
+                    android:id="@+id/startBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/blueGreen"
+                    android:shadowRadius="0"
+                    android:text="@string/label_start"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <include
+                    layout="@layout/include_layout_save_tracker"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:id="@+id/ivPlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_pause" />
+
+                <Button
+                    android:id="@+id/activityBtn"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_tracker_activity"
+                    android:shadowRadius="0"
+                    android:text="@string/label_activity"
+                    android:textColor="@color/yellow" />
+            </RelativeLayout>
+
+
+            <!-- Layout 5-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.50"
+                android:background="@color/gray2"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <!-- Layout 6 Distance-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtDistance"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.60"
+                        android:gravity="center"
+                        android:text="0 km"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="22dp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.40"
+                        android:gravity="center"
+                        android:text="@string/label_distance"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="20sp"
+                    android:background="@color/white" />
+
+                <!-- Layout 7  Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.50"
+                    android:background="@color/gray2"
+                    android:orientation="vertical">
+
+
+                    <Chronometer
+                        android:id="@+id/chronometer"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.60"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:textColor="@color/white"
+                        android:textSize="22dp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.40"
+                        android:gravity="center"
+                        android:text="@string/label_time"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+                <!--Divider-->
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="20sp"
+                    android:background="@color/white" />
+
+
+                <!-- Layout 8 Elevation-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:background="@color/gray2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtElevation"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.60"
+                        android:gravity="center"
+                        android:text="0 m"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="22dp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.40"
+                        android:gravity="center"
+                        android:text="@string/label_elevation"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/trackerSearchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone" />
+
+
+</FrameLayout>

@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -119,6 +120,15 @@ public class DetailTrailActivity extends BaseActivity {
     TextView segmentNameTxt;
     @BindView(R.id.resourcesSeparator)
     View resourcesSeparator;
+    @BindView(R.id.llTrailDetail)
+    LinearLayout llTrailDetail;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+    @BindView(R.id.ivArrowBack)
+    ImageView ivArrowBack;
+
+    @BindView(R.id.searchLayout)
+    FrameLayout searchLayout;
 
     public static Bitmap scaleBitmap(Bitmap bitmap, int wantedWidth, int wantedHeight) {
         Bitmap output = Bitmap.createBitmap(wantedWidth, wantedHeight, Bitmap.Config.ARGB_8888);
@@ -188,7 +198,6 @@ public class DetailTrailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-
                 String[] permissos = {"android.permission.CAMERA"};
 
                 if (ContextCompat.checkSelfPermission(DetailTrailActivity.this,
@@ -214,25 +223,22 @@ public class DetailTrailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (!isNetworkAvailable()) {
-                    new AlertDialog.Builder(DetailTrailActivity.this)
-                            .setTitle(R.string.alert_no_internet)
-                            .setMessage(R.string.alert_must_online_trail)
-                            .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                    return;
-                }
-
-                pushSegmentDetailFragment();
+//              pushSegmentDetailFragment();
+                llTrailDetail.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.VISIBLE);
                 DirectionTrailFragment directionTrailFragment = DirectionTrailFragment.newInstance(trailId);
                 replaceFragment(directionTrailFragment);
             }
         });
+
+        ivArrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+
     }
 
 
@@ -247,6 +253,8 @@ public class DetailTrailActivity extends BaseActivity {
 
             searchAndDownloadTrailFlickrPhotos("TrailCode_" + segment.getTrailId(), false);
             segmentNameTxt.setText(segment.getTrailName() + "\n" + segment.getSumLengthKm() + " km");
+
+            tvTitle.setText(segment.getTrailName());
 
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 if (!segment.getDescription().equals("")) {
@@ -351,11 +359,14 @@ public class DetailTrailActivity extends BaseActivity {
     }
 
     private void replaceFragment(Fragment replaceFragment) {
+
         FragmentTransaction mFragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (currentTab) {
             case "MapFragment":
+                llTrailDetail.setVisibility(View.GONE);
                 mFragmentTransaction
                         .replace(R.id.searchLayout, replaceFragment)
+                        .addToBackStack(null)
                         .commit();
                 break;
 //            case "MeasureFragment":
@@ -371,6 +382,13 @@ public class DetailTrailActivity extends BaseActivity {
 //
 //                break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        llTrailDetail.setVisibility(View.VISIBLE);
+        searchLayout.setVisibility(View.GONE);
     }
 
     private void searchAndDownloadTrailFlickrPhotos(String tag, final boolean isThumbnail) {

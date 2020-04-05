@@ -2,6 +2,7 @@ package ca.thegreattrail.ui.main;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -52,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
 
     public static Fragment fragment = null;
 
+    final Fragment fragmentMap = new MapFragment();
+    final Fragment fragmentMeasure = new MeasureFragment();
+    final Fragment fragmentTracker = new TrackerFragment();
+    final Fragment fragmentArchieve = new ArchiveFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = fragmentMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +68,15 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
 
         initView();
 
+        initFragment();
+
+    }
+
+    private void initFragment() {
+        fm.beginTransaction().add(R.id.main_nav_host, fragmentArchieve, "4").hide(fragmentArchieve).commit();
+        fm.beginTransaction().add(R.id.main_nav_host, fragmentTracker, "3").hide(fragmentTracker).commit();
+        fm.beginTransaction().add(R.id.main_nav_host, fragmentMeasure, "2").hide(fragmentMeasure).commit();
+        fm.beginTransaction().add(R.id.main_nav_host, fragmentMap, "1").commit();
     }
 
     private void initView() {
@@ -110,37 +128,30 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.OnClo
                 String tag = "";
                 switch (menuItem.getItemId()) {
                     case R.id.nav_map:
-                        if (!(currentFragment instanceof MapFragment)) {
-                            fragment = new MapFragment();
-                        }
-                        tag = MapFragment.class.getSimpleName();
+                        fm.beginTransaction().hide(active).show(fragmentMap).commit();
+                        active = fragmentMap;
                         break;
 
                     case R.id.nav_measure:
-                        if (!(currentFragment instanceof MeasureFragment)) {
-                            fragment = new MeasureFragment();
-                        }
-                        tag = MeasureFragment.class.getSimpleName();
+                        fm.beginTransaction().hide(active).show(fragmentMeasure).commit();
+                        active = fragmentMeasure;
                         break;
 
                     case R.id.nav_tracker:
-                        if (!(currentFragment instanceof TrackerFragment)) {
-                            fragment = new TrackerFragment();
-                        }
-                        tag = TrackerFragment.class.getSimpleName();
+                        fm.beginTransaction().hide(active).show(fragmentTracker).commit();
+                        active = fragmentTracker;
                         break;
 
                     case R.id.nav_archive:
-                        if (!(currentFragment instanceof ArchiveFragment)) {
-                            fragment = new ArchiveFragment();
-                        }
-                        tag = ArchiveFragment.class.getSimpleName();
+                        fm.beginTransaction().hide(active).show(fragmentArchieve).commit();
+                        active = fragmentArchieve;
                         break;
                 }
 
-                if (fragment != null) {
-                    replaceFragmentInActivity(fragment, R.id.main_nav_host);
-                }
+//                Toast.makeText(MainActivity.this, fragment.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+//                if (fragment != null) {
+//                    replaceFragmentInActivity(fragment, R.id.main_nav_host);
+//                }
 
                 return true;
             }

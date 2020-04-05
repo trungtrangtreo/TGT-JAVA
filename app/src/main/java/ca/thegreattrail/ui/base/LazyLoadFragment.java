@@ -1,5 +1,7 @@
 package ca.thegreattrail.ui.base;
 
+import android.util.Log;
+
 /**
  * Created by Islam Salah on 8/8/17.
  */
@@ -14,6 +16,7 @@ public abstract class LazyLoadFragment extends BaseTrailDrawingFragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser){
+            Log.e("trung", "setUserVisibleHint: ");
             this.isVisible = true;
             loadUi();
         }

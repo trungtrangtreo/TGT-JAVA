@@ -1,17 +1,18 @@
 package ca.thegreattrail.ui.map;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,17 +21,19 @@ import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
-
 import butterknife.ButterKnife;
 import ca.thegreattrail.R;
+import ca.thegreattrail.data.local.db.ActivityDBHelperTrail;
 import ca.thegreattrail.data.model.db.TrailSegment;
 import ca.thegreattrail.ui.base.HomeTabMapFragment;
+import ca.thegreattrail.ui.main.MainActivity;
+import ca.thegreattrail.ui.traildetail.DetailTrailActivity;
 
 public class MapFragment extends HomeTabMapFragment implements View.OnClickListener {
 
@@ -178,21 +181,28 @@ public class MapFragment extends HomeTabMapFragment implements View.OnClickListe
 
     @Override
     protected boolean hasClickableSegments() {
-        return false;
+        return true;
     }
 
     @Override
     protected void initializeMap(GoogleMap googleMap) {
         myMap = googleMap;
+        myMap.setMyLocationEnabled(true);
+        myMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        if (MainActivity.listSegments == null) {
+            googleMap.setOnCameraIdleListener(null);
+        } else {
+            googleMap.setOnCameraIdleListener(getCameraChangeListener());
+        }
+
+        myMap.setOnMapClickListener(mapClickListner());
+        myMap.setOnPolylineClickListener(polyLineClickListner());
     }
 
     @Override
     protected void onMapReady() {
         super.onMapReady();
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     //    private void drawGreatTrail() {
@@ -266,19 +276,20 @@ public class MapFragment extends HomeTabMapFragment implements View.OnClickListe
 //        increaseTrailResolutionTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 //    }
 //
-//    public GoogleMap.OnCameraIdleListener getCameraChangeListener() {
-//        return new GoogleMap.OnCameraIdleListener() {
-//
-//            @Override
-//            public void onCameraIdle() {
-//                onCameraIdle1();
-//
-////              center = myMap.getCameraPosition().target;
-////              zoom = myMap.getCameraPosition().zoom;
-//            }
-//        };
-//    }
-//
+    public GoogleMap.OnCameraIdleListener getCameraChangeListener() {
+        return new GoogleMap.OnCameraIdleListener() {
+
+            @Override
+            public void onCameraIdle() {
+                MapFragment.super.onCameraIdle();
+
+                center = myMap.getCameraPosition().target;
+                zoom = myMap.getCameraPosition().zoom;
+            }
+        };
+    }
+
+    //
 //    private void stylePolyline(Polyline polyline, int color, List<PatternItem> patternItems) {
 //        // Get the data object stored with the polyline.
 //        // Use a round cap at the start of the line.
@@ -292,61 +303,73 @@ public class MapFragment extends HomeTabMapFragment implements View.OnClickListe
 //        polyline.setPattern(patternItems);
 //    }
 //
-//    private GoogleMap.OnPolylineClickListener polyLineClickListner() {
-//        return new GoogleMap.OnPolylineClickListener() {
-//            @Override
-//            public void onPolylineClick(Polyline polyline) {
-//                if (lastSelectedPolyline != null)
-//                    lastSelectedPolyline.setWidth(unSelectedPolylineWidth);
-//
-//                lastSelectedPolyline = polyline;
-//                polyline.setWidth(selectedPolylineWidth);
-//
-//                List<LatLng> points = polyline.getPoints();
-//                selectedSegmentId = findSegmentIdWithPoints(points);
-//
-//                lastObjectIdMeasureTool = lastSelectedSegmentId;
-//                lastSelectedSegmentId = selectedSegmentId;
-//
-//                ActivityDBHelperTrail db = ActivityDBHelperTrail.getInstance(getContext());
-//                Cursor cursor = db.getSpecificSegments(selectedSegmentId);
-//                if (cursor != null && cursor.moveToFirst()) {
-//                    TrailSegment segment = new TrailSegment(cursor);
-//                    selectedTrail = segment;
-//
-//                    showSegmentInfo(segment);
-//                }
-//                cursor.close();
-//            }
-//        };
-//
-//    }
-//
-//    protected void showSegmentInfo(TrailSegment segment) {
-//        tvSuggest.setText("");
-//        tvTrailName.setText(segment.getTrailName());
-//        tvDistance.setText(segment.getSumLengthKm() + " km");
-//    }
-//
-//    private int findSegmentIdWithPoints(List<LatLng> points) {
-//
-//        if (points == null || points.size() < 2)
-//            return -1;
-//
-//        LatLng firstPoint = points.get(0);
-//        LatLng lastPoint = points.get(points.size() - 1);
-//
-//        ArrayList<LatLng> segmentPoints;
-//        for (int id : MainActivity.listPoints.keySet()) {
-//            segmentPoints = MainActivity.listPoints.get(id);
-//            if (segmentPoints.get(0).equals(firstPoint) &&
-//                    segmentPoints.get(segmentPoints.size() - 1).equals(lastPoint))
-//                return id;
-//        }
-//
-//        return -1;                      // Not found
-//    }
-//
+    private GoogleMap.OnPolylineClickListener polyLineClickListner() {
+        return new GoogleMap.OnPolylineClickListener() {
+            @Override
+            public void onPolylineClick(Polyline polyline) {
+                if (lastSelectedPolyline != null)
+                    lastSelectedPolyline.setWidth(unSelectedPolylineWidth);
+
+                lastSelectedPolyline = polyline;
+                polyline.setWidth(selectedPolylineWidth);
+
+                List<LatLng> points = polyline.getPoints();
+                selectedSegmentId = findSegmentIdWithPoints(points);
+
+                lastObjectIdMeasureTool = lastSelectedSegmentId;
+                lastSelectedSegmentId = selectedSegmentId;
+
+                ActivityDBHelperTrail db = ActivityDBHelperTrail.getInstance(getContext());
+                Cursor cursor = db.getSpecificSegments(selectedSegmentId);
+                if (cursor != null && cursor.moveToFirst()) {
+                    TrailSegment segment = new TrailSegment(cursor);
+                    selectedTrail = segment;
+
+                    showSegmentInfo(segment);
+                }
+                cursor.close();
+            }
+        };
+
+    }
+
+    private GoogleMap.OnMapClickListener mapClickListner() {
+        return new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (lastSelectedPolyline != null)
+                    lastSelectedPolyline.setWidth(unSelectedPolylineWidth);
+            }
+        };
+    }
+
+    protected void showSegmentInfo(TrailSegment segment) {
+        tvSuggest.setText("");
+        tvTrailName.setText(segment.getTrailName());
+        tvDistance.setText(segment.getSumLengthKm() + " km");
+    }
+
+    //
+    private int findSegmentIdWithPoints(List<LatLng> points) {
+
+        if (points == null || points.size() < 2)
+            return -1;
+
+        LatLng firstPoint = points.get(0);
+        LatLng lastPoint = points.get(points.size() - 1);
+
+        ArrayList<LatLng> segmentPoints;
+        for (int id : MainActivity.listPoints.keySet()) {
+            segmentPoints = MainActivity.listPoints.get(id);
+            if (segmentPoints.get(0).equals(firstPoint) &&
+                    segmentPoints.get(segmentPoints.size() - 1).equals(lastPoint))
+                return id;
+        }
+
+        return -1;                      // Not found
+    }
+
+    //
 //    private List<TrailSegmentLight> visibleSegments(LatLngBounds bounds) {
 //        LatLng northEast = bounds.northeast;
 //        LatLng southWest = bounds.southwest;
@@ -406,52 +429,41 @@ public class MapFragment extends HomeTabMapFragment implements View.OnClickListe
 //        }
 //    }
 //
-//    @Override
-//    public void onClick(View v) {
-//        if (v.getId() == R.id.rlBottom) {
-//            if (selectedTrail != null) {
-//                getDetailTrail();
-//            }
-//        }
-//    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.rlBottom) {
+            if (selectedTrail != null) {
+                getDetailTrail();
+            }
+        }
+    }
+
+    //
+    private void getDetailTrail() {
+
+//        pushMapFragmentToStack();
+
+//        SegmentDetailsFragment segmentDetailsFragment = new SegmentDetailsFragment();
+//        segmentDetailsFragment.setObjectId(lastSelectedSegmentId);
+//        Bundle args = new Bundle();
+//        args.putString("trailId", selectedTrail.getTrailId());
+//        args.putString("trail_name", selectedTrail.getTrailName());
+//        segmentDetailsFragment.setArguments(args);
 //
-//    private void getDetailTrail() {
-//        if (!NetworkUtils.isNetworkConnected(getContext())) {
-//            //Toast.makeText(AreaSelectionActivity.this, "Check please your Internet connection", Toast.LENGTH_SHORT).show();
-//            new AlertDialog.Builder(getActivity())
-//                    .setTitle(R.string.alert_no_internet)
-//                    .setMessage(R.string.alert_must_online_trail)
-//                    .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    })
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show();
-//            return;
-//        }
-////        pushMapFragmentToStack();
-//
-////        SegmentDetailsFragment segmentDetailsFragment = new SegmentDetailsFragment();
-////        segmentDetailsFragment.setObjectId(lastSelectedSegmentId);
-////        Bundle args = new Bundle();
-////        args.putString("trailId", selectedTrail.getTrailId());
-////        args.putString("trail_name", selectedTrail.getTrailName());
-////        segmentDetailsFragment.setArguments(args);
-////
-////        replaceFragment(R.id.searchLayout, segmentDetailsFragment);
-//
-////        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-////        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-////        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-//
-//        Intent intent = new Intent(getContext(), DetailTrailActivity.class);
-//        intent.putExtra(TRAIL_ID, selectedTrail.getTrailId());
-//        intent.putExtra(TRAIL_NAME, selectedTrail.getTrailName());
-//        intent.putExtra(OBJECT_ID, lastSelectedSegmentId);
-//        startActivity(intent);
-//    }
-//
+//        replaceFragment(R.id.searchLayout, segmentDetailsFragment);
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+
+        Intent intent = new Intent(getContext(), DetailTrailActivity.class);
+        intent.putExtra(TRAIL_ID, selectedTrail.getTrailId());
+        intent.putExtra(TRAIL_NAME, selectedTrail.getTrailName());
+        intent.putExtra(OBJECT_ID, lastSelectedSegmentId);
+        startActivity(intent);
+    }
+
+    //
 //    private void pushMapFragmentToStack() {
 //        String segmentTag = "MapFragment";
 //        MapFragment mapFragment = (MapFragment) MainActivity.fragment;

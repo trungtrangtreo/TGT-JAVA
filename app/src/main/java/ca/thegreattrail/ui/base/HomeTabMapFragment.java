@@ -7,22 +7,13 @@ import android.view.View;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.gms.maps.model.CameraPosition;
 import ca.thegreattrail.R;
-import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.ui.search.SearchListFragment;
-
-/**
- * Created by Islam Salah on 10/30/17.
- * <p>
- * https://github.com/IslamSalah
- * islamsalah007@gmail.com
- */
 
 public abstract class HomeTabMapFragment extends LazyLoadFragment implements SearchView.OnQueryTextListener {
 
     public String searchText;
 
     protected SearchListFragment searchListFragment;
-    protected MainActivity activity;
 
     protected SearchListFragment createSearchListFragment() {
         if (myMap == null)
@@ -34,8 +25,10 @@ public abstract class HomeTabMapFragment extends LazyLoadFragment implements Sea
 
     @Override
     protected void loadUi() {
-        if (!isVisible || !isViewCreated || isLoaded)
+
+        if (!isViewCreated || isLoaded) {
             return;
+        }
 
         isLoaded = true;
         setupMapView();
@@ -48,7 +41,7 @@ public abstract class HomeTabMapFragment extends LazyLoadFragment implements Sea
             if (searchListFragment.NeedToSave(newText))
                 searchListFragment.SaveRecentSearch(newText);
 
-            searchListFragment.refreshData(activity, newText);
+            searchListFragment.refreshData(getActivity(), newText);
         } catch (Exception e) {
             Log.i("onQueryTextSubmit", e.getMessage());
         }
@@ -57,7 +50,7 @@ public abstract class HomeTabMapFragment extends LazyLoadFragment implements Sea
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        searchListFragment.refreshData(activity, newText);
+        searchListFragment.refreshData(getActivity(), newText);
         searchText = newText;
         return false;
     }

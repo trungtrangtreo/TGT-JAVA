@@ -37,6 +37,8 @@
         </activity>
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.howtouse.HowToUseActivity" />
+        <activity android:name=".ui.trackerlog.LogTrackerAcitivty" />
+        <activity android:name=".ui.trackerlog.DetailTrackerActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

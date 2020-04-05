@@ -1,10 +1,18 @@
 package ca.thegreattrail.data.local.db;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import io.requery.android.database.sqlite.SQLiteDatabase;
@@ -24,7 +32,7 @@ public class ActivityDBHelperTrail extends SQLiteOpenHelper {
 
     private static ActivityDBHelperTrail sInstance;
 
-    public static String DB_PATH = "/data/data/ca.TransCanadaTrail.TheGreatTrail/databases/";
+    public static String DB_PATH = "/data/data/ca.thegreattrail/databases/";
 
     public static String DB_NAME = "trailDb.sqlite";
     public static final int DB_VERSION = 1;
@@ -54,7 +62,43 @@ public class ActivityDBHelperTrail extends SQLiteOpenHelper {
     public ActivityDBHelperTrail(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
+
+        File file = new File(DB_PATH + "trailDb.sqlite");
+        if (file.exists()) {
+            opendatabase();
+        } else {
+            this.getReadableDatabase();
+            try {
+                copydatabase();
+            } catch(IOException e) {
+                throw new Error("Error copying database");
+            }
+        }
+
         Log.e("LocationService", "Creation de ActivityDBHelperTrail   ------------------------------------------------------------------------------   ActivityDBHelperTrail ");
+    }
+
+    private void copydatabase() throws IOException {
+        //Open your local db as the input stream
+        InputStream myinput = context.getAssets().open(DB_NAME);
+
+        // Path to the just created empty db
+        String outfilename = DB_PATH + DB_NAME;
+
+        //Open the empty db as the output stream
+        OutputStream myoutput = new FileOutputStream(outfilename);
+
+        // transfer byte to inputfile to outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myinput.read(buffer))>0) {
+            myoutput.write(buffer,0,length);
+        }
+
+        //Close the streams
+        myoutput.flush();
+        myoutput.close();
+        myinput.close();
     }
 
     @Override
@@ -77,7 +121,14 @@ public class ActivityDBHelperTrail extends SQLiteOpenHelper {
         super.close();
     }
 
-//    public int getCount(){
+    public void opendatabase() throws SQLException {
+        //Open the database
+        String mypath = DB_PATH + DB_NAME;
+        myDB = SQLiteDatabase.openDatabase(mypath, null, SQLiteDatabase.OPEN_READWRITE);
+    }
+
+
+    //    public int getCount(){
 //
 //        String version = "0.0";
 //        // 1. get reference to readable DB
@@ -92,6 +143,57 @@ public class ActivityDBHelperTrail extends SQLiteOpenHelper {
 //        }
 //        return version;
 //    }
+
+    private static boolean copyAssetFolder(AssetManager assetManager,
+                                           String fromAssetPath, String toPath) {
+        try {
+            String[] files = assetManager.list(fromAssetPath);
+            new File(toPath).mkdirs();
+            boolean res = true;
+            for (String file : files)
+                if (file.contains("."))
+                    res &= copyAsset(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+                else
+                    res &= copyAssetFolder(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean copyAsset(AssetManager assetManager,
+                                     String fromAssetPath, String toPath) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(fromAssetPath);
+            new File(toPath).createNewFile();
+            out = new FileOutputStream(toPath);
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+    }
 
     public String getVersion() {
         String version = "0.0";
@@ -241,7 +343,7 @@ public class ActivityDBHelperTrail extends SQLiteOpenHelper {
 //                jsonString = new String(blob, "UTF-8");
 //            } catch (UnsupportedEncodingException e1) {
 //                e1.printStackTrace();
-                jsonString = null;
+            jsonString = null;
 //            }
         }
 

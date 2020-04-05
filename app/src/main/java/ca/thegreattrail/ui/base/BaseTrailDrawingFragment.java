@@ -1,10 +1,15 @@
 package ca.thegreattrail.ui.base;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.CallSuper;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,6 +19,7 @@ import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
@@ -30,6 +36,8 @@ import ca.thegreattrail.data.model.db.TrailSegmentLight;
 import ca.thegreattrail.ui.main.MainActivity;
 import ca.thegreattrail.utlis.Constants;
 import ca.thegreattrail.utlis.TrailUtility;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public abstract class BaseTrailDrawingFragment extends Fragment {
 
@@ -129,11 +137,30 @@ public abstract class BaseTrailDrawingFragment extends Fragment {
     }
 
     protected void setupMapView() {
+
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 initializeMap(googleMap);
+
+                try {
+                    // Customise the styling of the base map using a JSON object defined
+                    // in a raw resource file.
+                    boolean success = googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                    getContext(), R.raw.style_json));
+
+                    if (!success) {
+                        Log.e(TAG, "Style parsing failed.");
+                    }
+                } catch (Resources.NotFoundException e) {
+                    Log.e(TAG, "Can't find style. Error: ", e);
+                }
+
                 BaseTrailDrawingFragment.this.onMapReady();
+
+                LatLng canada = new LatLng(55.508930, -96.654281);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(canada));
             }
         });
     }
@@ -292,5 +319,4 @@ public abstract class BaseTrailDrawingFragment extends Fragment {
             }
         }
     }
-
 }

@@ -35,6 +35,9 @@
     <string name="title_archive">Archive</string>
     <string name="title_search">Search</string>
     <string name="title_directions_to_trail">Directions to the Trail</string>
+    <string name="title_delete_activity_title"> Delete Activity </string>
+    <string name="title_delete_activity_message">Are you sure you want to delete this activity ?</string>
+    <string name="title_activity_log">Activity Log</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -71,13 +74,26 @@
     <string name="label_trail_services">Trail Services</string>
     <string name="label_recent_search">Recent Searches</string>
     <string name="label_trails">Trails</string>
+    <string name="label_start"> Start </string>
+    <string name="label_activity">Activity</string>
+    <string name="label_time"> TIME </string>
+    <string name="label_menu"> Menu </string>
+    <string name="label_enter_name">Enter name</string>
+
+    <string name="activity_tracker_name">Activity Tracker Name</string>
+    <string name="activity_tracker_name_message">Please choose a name for your track.</string>
+    <string name="activity_log_message">You have no saved trails.</string>
 
     <string name="alert_no_internet">No Internet connection</string>
     <string name="alert_must_online_trail">You must be online to view trails</string>
     <string name="alert_clear_measurement_title">Clear Measurement</string>
     <string name="alert_clear_measurement_message">Are you sure you want clear this measurement?</string>
+    <string name="alert_delete_activity_confirmation_title">Delete Activity</string>
+    <string name="alert_delete_activity_confirmation_message">The activity was  deleted successfully.</string>
 
     <string name="button_share">Share</string>
+    <string name="button_ok"> Ok</string>
+    <string name="button_cancel">Cancel</string>
 
     <string name="yes">YES</string>
     <string name="no">NO</string>

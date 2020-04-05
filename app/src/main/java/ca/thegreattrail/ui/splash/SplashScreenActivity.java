@@ -73,7 +73,7 @@ import ca.thegreattrail.utlis.JsonParserExecutor;
 public class SplashScreenActivity extends Activity {
 
     //  private String download_file_path ="https://api.tctrail.ca";
-    private String download_file_path = "https://firebasestorage.googleapis.com/v0/b/facedemo-2f20e.appspot.com/o/trailDb.sqlite?alt=media&token=b74f1951-83cc-4d44-ae21-1a0f1ab832eb";
+    private String download_file_path = "https://firebasestorage.googleapis.com/v0/b/tgt-trail.appspot.com/o/trailDb.sqlite?alt=media&token=7616a69d-2400-46e3-af21-deebe104415d";
     private boolean updateAvailable = false;
 
     private ProgressBar progressBar;
@@ -297,7 +297,6 @@ public class SplashScreenActivity extends Activity {
         };
         queue.add(postRequest);
     }
-
 
     private void checkDownloadAmenitiesDb() {
 
@@ -866,7 +865,9 @@ public class SplashScreenActivity extends Activity {
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            checkDownloadTrailDb();
+//                          checkDownloadTrailDb();
+                            DoCalculations doCalculations = new DoCalculations(SplashScreenActivity.this);
+                            doCalculations.execute();
                         }
 
                         // check for permanent denial of any permission
